@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Waterfall Task Planner</title>
+    <link rel="stylesheet" href="obr_planner.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>📊 Waterfall Task Planner</h1>
+            <p>Инструмент планирования задач по Waterfall-методологии</p>
+        </header>
+
+        <!-- Управление исполнителями -->
+        <section class="section">
+            <h2>👥 Управление исполнителями</h2>
+            <div class="form-group">
+                <input type="text" id="executor-name" placeholder="Имя исполнителя">
+                <input type="number" id="executor-efficiency" min="0.1" max="2" step="0.1" value="1.0" placeholder="Производительность">
+                <button onclick="addExecutor()">Добавить</button>
+            </div>
+            <div id="executors-list"></div>
+        </section>
+
+        <!-- Добавление задачи -->
+        <section class="section">
+            <h2>➕ Добавить задачу</h2>
+            <div class="form-grid">
+                <input type="text" id="task-title" placeholder="Название задачи" required>
+                
+                <div class="form-row">
+                    <input type="number" id="task-duration" min="1" value="1" placeholder="Длительность (раб. дней)">
+                    <input type="date" id="task-start-date">
+                    <input type="date" id="task-end-date" readonly>
+                </div>
+                
+                <div class="form-row">
+                    <input type="date" id="task-start-after" placeholder="Начать не раньше">
+                    <input type="date" id="task-finish-before" placeholder="Закончить не позже">
+                </div>
+                
+                <div class="form-row">
+                    <select id="task-executor" multiple size="3"></select>
+                    <select id="task-epic">
+                        <option value="">-- Эпик --</option>
+                        <option value="Разработка">Разработка</option>
+                        <option value="Тестирование">Тестирование</option>
+                        <option value="Документация">Документация</option>
+                    </select>
+                    <input type="number" id="task-priority" min="1" max="9" value="5" placeholder="Ценность (1-9)">
+                </div>
+                
+                <div class="form-row">
+                    <select id="task-dependency" multiple size="3"></select>
+                    <textarea id="task-comments" placeholder="Комментарии"></textarea>
+                </div>
+            </div>
+            
+            <button onclick="addTask()" class="btn-primary">Добавить задачу</button>
+        </section>
+
+        <!-- Таблица задач -->
+        <section class="section">
+            <div class="section-header">
+                <h2>📋 Список задач</h2>
+                <div class="controls">
+                    <button onclick="calculateSchedule()">Рассчитать график</button>
+                    <button onclick="saveToXML()">💾 Сохранить XML</button>
+                    <input type="file" id="load-xml" accept=".xml" onchange="loadFromXML(event)" style="display:none;">
+                    <label for="load-xml" class="btn-secondary">📂 Загрузить XML</label>
+                </div>
+            </div>
+            
+            <div class="table-container">
+                <table id="tasks-table">
+                    <thead>
+                        <tr>
+                            <th>Название</th>
+                            <th>Длительность</th>
+                            <th>Начало</th>
+                            <th>Окончание</th>
+                            <th>Исполнители</th>
+                            <th>Эпик</th>
+                            <th>Ценность</th>
+                            <th>Действия</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tasks-tbody"></tbody>
+                </table>
+            </div>
+        </section>
+    </div>
+
+    <script src="obr_planner.js"></script>
+</body>
+</html>
