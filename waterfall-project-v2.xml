@@ -1,0 +1,197 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="Поход в горы 2025">
+  <executors>
+    <executor id="1001" name="Иванов И.И." efficiency="1.2" availability="true" />
+    <executor id="1002" name="Петров П.П." efficiency="1.0" availability="true" />
+    <executor id="1003" name="Сидоров С.С." efficiency="0.9" availability="true" />
+    <executor id="1004" name="Козлов А.А." efficiency="1.1" availability="true" />
+    <executor id="1005" name="Волков Д.Д." efficiency="1.0" availability="true" />
+  </executors>
+  <tasks>
+    <task id="1" title="Подготовка снаряжения" duration="3" priority="8">
+      <start_date></start_date>
+      <end_date></end_date>
+      <calculated_start>2025-06-01</calculated_start>
+      <calculated_end>2025-06-05</calculated_end>
+      <start_after>2025-06-01</start_after>
+      <finish_before>2025-06-10</finish_before>
+      <epic>Подготовка</epic>
+      <comments>Проверка и ремонт снаряжения, покупка недостающего</comments>
+      <assignees>
+        <assignee id="1001" />
+        <assignee id="1002" />
+        <assignee id="1003" />
+      </assignees>
+      <dependencies>
+      </dependencies>
+    </task>
+    <task id="2" title="Закупка продуктов" duration="2" priority="7">
+      <start_date></start_date>
+      <end_date></end_date>
+      <calculated_start>2025-06-06</calculated_start>
+      <calculated_end>2025-06-08</calculated_end>
+      <start_after></start_after>
+      <finish_before>2025-06-12</finish_before>
+      <epic>Подготовка</epic>
+      <comments>Составление меню, закупка продуктов и сухпайков</comments>
+      <assignees>
+        <assignee id="1002" />
+        <assignee id="1004" />
+      </assignees>
+      <dependencies>
+        <dependency id="1" />
+      </dependencies>
+    </task>
+    <task id="3" title="Трансфер к точке старта" duration="1" priority="9">
+      <start_date></start_date>
+      <end_date></end_date>
+      <calculated_start>2025-06-13</calculated_start>
+      <calculated_end>2025-06-13</calculated_end>
+      <start_after></start_after>
+      <finish_before>2025-06-15</finish_before>
+      <epic>Переезд</epic>
+      <comments>Доставка группы и снаряжения к месту начала маршрута</comments>
+      <assignees>
+        <assignee id="1001" />
+        <assignee id="1005" />
+      </assignees>
+      <dependencies>
+        <dependency id="2" />
+      </dependencies>
+    </task>
+    <task id="4" title="Первый переход" duration="2" priority="6">
+      <start_date></start_date>
+      <end_date></end_date>
+      <calculated_start>2025-06-14</calculated_start>
+      <calculated_end>2025-06-16</calculated_end>
+      <start_after></start_after>
+      <finish_before></finish_before>
+      <epic>Маршрут</epic>
+      <comments>Выход из базового лагеря, подъем к первому перевалу</comments>
+      <assignees>
+        <assignee id="1001" />
+        <assignee id="1002" />
+        <assignee id="1003" />
+        <assignee id="1004" />
+        <assignee id="1005" />
+      </assignees>
+      <dependencies>
+        <dependency id="3" />
+      </dependencies>
+    </task>
+    <task id="5" title="Акклиматизация" duration="2" priority="5">
+      <start_date></start_date>
+      <end_date></end_date>
+      <calculated_start>2025-06-17</calculated_start>
+      <calculated_end>2025-06-19</calculated_end>
+      <start_after></start_after>
+      <finish_before></finish_before>
+      <epic>Маршрут</epic>
+      <comments>Пребывание на высоте 2500 м, тренировочные выходы</comments>
+      <assignees>
+        <assignee id="1001" />
+        <assignee id="1002" />
+        <assignee id="1003" />
+        <assignee id="1004" />
+        <assignee id="1005" />
+      </assignees>
+      <dependencies>
+        <dependency id="4" />
+      </dependencies>
+    </task>
+    <task id="6" title="Второй переход" duration="3" priority="8">
+      <start_date></start_date>
+      <end_date></end_date>
+      <calculated_start>2025-06-20</calculated_start>
+      <calculated_end>2025-06-24</calculated_end>
+      <start_after></start_after>
+      <finish_before></finish_before>
+      <epic>Маршрут</epic>
+      <comments>Подъем ко второму перевалу, установка высокого лагеря</comments>
+      <assignees>
+        <assignee id="1001" />
+        <assignee id="1002" />
+        <assignee id="1003" />
+        <assignee id="1004" />
+        <assignee id="1005" />
+      </assignees>
+      <dependencies>
+        <dependency id="5" />
+      </dependencies>
+    </task>
+    <task id="7" title="Штурм вершины" duration="2" priority="10">
+      <start_date></start_date>
+      <end_date></end_date>
+      <calculated_start>2025-06-25</calculated_start>
+      <calculated_end>2025-06-27</calculated_end>
+      <start_after></start_after>
+      <finish_before>2025-07-01</finish_before>
+      <epic>Маршрут</epic>
+      <comments>Покорение вершины, спуск к лагерю</comments>
+      <assignees>
+        <assignee id="1001" />
+        <assignee id="1002" />
+        <assignee id="1003" />
+        <assignee id="1004" />
+        <assignee id="1005" />
+      </assignees>
+      <dependencies>
+        <dependency id="6" />
+      </dependencies>
+    </task>
+    <task id="8" title="Спуск в базовый лагерь" duration="2" priority="7">
+      <start_date></start_date>
+      <end_date></end_date>
+      <calculated_start>2025-06-28</calculated_start>
+      <calculated_end>2025-06-30</calculated_end>
+      <start_after></start_after>
+      <finish_before></finish_before>
+      <epic>Завершение</epic>
+      <comments>Спуск с перевала, сбор лагеря, подготовка к возвращению</comments>
+      <assignees>
+        <assignee id="1001" />
+        <assignee id="1002" />
+        <assignee id="1003" />
+        <assignee id="1004" />
+        <assignee id="1005" />
+      </assignees>
+      <dependencies>
+        <dependency id="7" />
+      </dependencies>
+    </task>
+    <task id="9" title="Трансфер домой" duration="1" priority="6">
+      <start_date></start_date>
+      <end_date></end_date>
+      <calculated_start>2025-07-01</calculated_start>
+      <calculated_end>2025-07-01</calculated_end>
+      <start_after></start_after>
+      <finish_before>2025-07-05</finish_before>
+      <epic>Завершение</epic>
+      <comments>Транспортировка группы и снаряжения обратно</comments>
+      <assignees>
+        <assignee id="1001" />
+        <assignee id="1005" />
+      </assignees>
+      <dependencies>
+        <dependency id="8" />
+      </dependencies>
+    </task>
+    <task id="10" title="Обработка материалов" duration="3" priority="5">
+      <start_date></start_date>
+      <end_date></end_date>
+      <calculated_start>2025-07-02</calculated_start>
+      <calculated_end>2025-07-06</calculated_end>
+      <start_after></start_after>
+      <finish_before>2025-07-15</finish_before>
+      <epic>Аналитика</epic>
+      <comments>Фото/видео материалы, отчет о походе, анализ маршрута</comments>
+      <assignees>
+        <assignee id="1002" />
+        <assignee id="1004" />
+      </assignees>
+      <dependencies>
+        <dependency id="9" />
+      </dependencies>
+    </task>
+  </tasks>
+</project>
