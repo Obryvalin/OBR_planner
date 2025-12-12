@@ -32,6 +32,13 @@ header h1 {
     margin-bottom: 10px;
 }
 
+.toolbar {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+}
+
 .section {
     background: white;
     margin-bottom: 30px;
@@ -46,79 +53,7 @@ header h1 {
     font-size: 1.5em;
 }
 
-.form-group {
-    display: flex;
-    gap: 10px;
-    margin-bottom: 15px;
-    align-items: center;
-    flex-wrap: wrap;
-}
-
-.form-group label {
-    font-weight: 500;
-    color: #495057;
-    min-width: 150px;
-    text-align: right;
-}
-
-.form-group input,
-.form-group button {
-    min-width: 200px;
-}
-
-.form-grid {
-    display: grid;
-    gap: 15px;
-    margin-bottom: 20px;
-}
-
-.form-row {
-    display: flex;
-    gap: 15px;
-    flex-wrap: wrap;
-}
-
-.form-field {
-    display: flex;
-    flex-direction: column;
-    flex: 1;
-    min-width: 250px;
-}
-
-.form-field label {
-    font-weight: 500;
-    margin-bottom: 5px;
-    color: #495057;
-    font-size: 14px;
-}
-
-.form-field input,
-.form-field select,
-.form-field textarea {
-    padding: 10px 12px;
-    border: 1px solid #ced4da;
-    border-radius: 5px;
-    font-size: 14px;
-    transition: border-color 0.3s;
-}
-
-.form-field input:focus,
-.form-field select:focus,
-.form-field textarea:focus {
-    outline: none;
-    border-color: #80bdff;
-    box-shadow: 0 0 0 0.2rem rgba(0,123,255,0.25);
-}
-
-.form-field textarea {
-    resize: vertical;
-    min-height: 80px;
-}
-
-.form-field select[multiple] {
-    height: 100px;
-}
-
+/* Кнопки */
 .btn-primary {
     background: #28a745;
     color: white;
@@ -126,9 +61,10 @@ header h1 {
     padding: 12px 24px;
     border-radius: 5px;
     cursor: pointer;
-    font-size: 16px;
+    font-size: 14px;
     transition: background 0.3s;
-    min-width: 180px;
+    text-decoration: none;
+    display: inline-block;
 }
 
 .btn-primary:hover {
@@ -139,7 +75,7 @@ header h1 {
     background: #6c757d;
     color: white;
     border: none;
-    padding: 8px 16px;
+    padding: 12px 24px;
     border-radius: 5px;
     cursor: pointer;
     font-size: 14px;
@@ -150,6 +86,7 @@ header h1 {
     background: #5a6268;
 }
 
+/* Таблица */
 .table-container {
     overflow-x: auto;
 }
@@ -177,15 +114,135 @@ tr:hover {
     background-color: #f8f9fa;
 }
 
-.executor-item {
-    display: inline-block;
-    background: #e9ecef;
+.delete-btn {
+    background: #dc3545;
+    color: white;
+    border: none;
     padding: 5px 10px;
-    margin: 2px;
-    border-radius: 15px;
+    border-radius: 3px;
+    cursor: pointer;
     font-size: 12px;
 }
 
+.delete-btn:hover {
+    background: #c82333;
+}
+
+.edit-btn {
+    background: #007bff;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 3px;
+    cursor: pointer;
+    font-size: 12px;
+}
+
+.edit-btn:hover {
+    background: #0056b3;
+}
+
+/* Модальные окна */
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0,0,0,0.5);
+}
+
+.modal-content {
+    background-color: white;
+    margin: 5% auto;
+    padding: 20px;
+    border: none;
+    border-radius: 10px;
+    width: 90%;
+    max-width: 900px;
+    max-height: 80vh;
+    overflow-y: auto;
+    position: relative;
+}
+
+.close {
+    position: absolute;
+    right: 15px;
+    top: 15px;
+    color: #aaa;
+    font-size: 28px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.close:hover {
+    color: #000;
+}
+
+.modal-actions {
+    display: flex;
+    gap: 10px;
+    justify-content: flex-end;
+    margin-top: 20px;
+    padding-top: 20px;
+    border-top: 1px solid #eee;
+}
+
+/* Формы */
+.form-group {
+    margin-bottom: 15px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: 600;
+    color: #495057;
+}
+
+.form-group input,
+.form-group select,
+.form-group textarea {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 14px;
+    transition: border-color 0.3s;
+}
+
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus {
+    outline: none;
+    border-color: #667eea;
+    box-shadow: 0 0 0 2px rgba(102, 126, 234, 0.25);
+}
+
+.form-row {
+    display: flex;
+    gap: 15px;
+    flex-wrap: wrap;
+    margin-bottom: 15px;
+}
+
+.form-row > .form-group {
+    flex: 1;
+    min-width: 200px;
+}
+
+.form-row select[multiple] {
+    height: 100px;
+}
+
+.form-row textarea {
+    resize: vertical;
+    min-height: 80px;
+}
+
+/* Специальные стили для задач */
 .task-high-priority {
     background-color: #ffebee !important;
     border-left: 4px solid #f44336;
@@ -201,238 +258,91 @@ tr:hover {
     border-left: 4px solid #17a2b8;
 }
 
-.section-header {
+/* Список исполнителей в модалке */
+.executor-item {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 20px;
-}
-
-.controls {
-    display: flex;
-    gap: 10px;
-}
-
-.action-btn {
-    background: #17a2b8;
-    color: white;
-    border: none;
-    padding: 5px 10px;
-    border-radius: 3px;
-    cursor: pointer;
-    font-size: 12px;
-    margin: 0 2px;
-}
-
-.action-btn:hover {
-    background: #138496;
-}
-
-.edit-btn {
-    background: #ffc107;
-    color: #212529;
-}
-
-.edit-btn:hover {
-    background: #e0a800;
-}
-
-.delete-btn {
-    background: #dc3545;
-    color: white;
-}
-
-.delete-btn:hover {
-    background: #c82333;
-}
-
-/* Стили для формы редактирования */
-.edit-form-section {
-    border: 2px solid #28a745;
-    background-color: #f8fff9;
-}
-
-.form-actions {
-    display: flex;
-    gap: 10px;
-    justify-content: flex-start;
-    margin-top: 20px;
-}
-
-/* Стили для фильтров */
-.filters-section {
     background: #f8f9fa;
+    padding: 10px;
+    margin: 5px 0;
+    border-radius: 5px;
     border: 1px solid #dee2e6;
 }
 
-.filters-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-    gap: 15px;
-    margin-bottom: 15px;
-}
-
-.filter-group {
+.executor-info {
     display: flex;
     flex-direction: column;
 }
 
-.filter-group label {
-    font-weight: 500;
-    margin-bottom: 5px;
+.executor-name {
+    font-weight: 600;
     color: #495057;
-    font-size: 14px;
 }
 
-.filter-group input,
-.filter-group select {
-    padding: 8px 12px;
-    border: 1px solid #ced4da;
-    border-radius: 4px;
-    font-size: 14px;
-}
-
-.filter-actions {
-    display: flex;
-    align-items: flex-end;
-}
-
-.sortable {
-    cursor: pointer;
-    user-select: none;
-    position: relative;
-}
-
-.sortable:hover {
-    background-color: #e9ecef;
-}
-
-.sort-indicator {
+.executor-details {
     font-size: 12px;
-    margin-left: 5px;
-    opacity: 0.5;
-}
-
-.sort-indicator.active {
-    opacity: 1;
-    color: #007bff;
-}
-
-.sort-indicator.asc::after {
-    content: " ↑";
-}
-
-.sort-indicator.desc::after {
-    content: " ↓";
-}
-
-.table-footer {
-    margin-top: 15px;
-    padding: 10px;
-    background-color: #f8f9fa;
-    border-top: 1px solid #dee2e6;
-    text-align: right;
-    font-size: 14px;
     color: #6c757d;
 }
 
-.schedule-chart {
-    background: white;
-    padding: 20px;
-    border-radius: 8px;
-    border: 1px solid #eee;
-}
-
-.executor-schedule {
-    margin-bottom: 20px;
-    padding: 15px;
-    background: #fafafa;
-    border-radius: 5px;
-}
-
-.executor-name {
-    font-weight: bold;
-    margin-bottom: 10px;
-    color: #2c3e50;
-}
-
-.task-bar {
-    height: 25px;
-    background: #3498db;
+.executor-actions button {
+    margin-left: 5px;
+    padding: 4px 8px;
+    border: none;
     border-radius: 3px;
-    margin: 5px 0;
-    position: relative;
     cursor: pointer;
-}
-
-.task-bar.high-priority {
-    background: #e74c3c;
-}
-
-.task-bar.medium-priority {
-    background: #f39c12;
-}
-
-.task-bar.low-priority {
-    background: #3498db;
-}
-
-.task-bar:hover {
-    opacity: 0.8;
-}
-
-.task-info {
-    position: absolute;
-    top: -25px;
-    left: 0;
-    background: rgba(0,0,0,0.8);
-    color: white;
-    padding: 5px 10px;
-    border-radius: 3px;
     font-size: 12px;
-    white-space: nowrap;
-    display: none;
 }
 
-.task-bar:hover .task-info {
-    display: block;
+.executor-edit {
+    background: #17a2b8;
+    color: white;
 }
 
+.executor-delete {
+    background: #dc3545;
+    color: white;
+}
+
+.executor-toggle {
+    background: #28a745;
+    color: white;
+}
+
+/* Адаптивность */
 @media (max-width: 768px) {
     .form-row {
         flex-direction: column;
     }
     
-    .form-field {
-        min-width: 100%;
-    }
-    
-    .form-group {
+    .toolbar {
         flex-direction: column;
-        align-items: flex-start;
     }
     
-    .form-group label {
-        text-align: left;
-        margin-bottom: 5px;
+    .modal-content {
+        margin: 10% auto;
+        width: 95%;
     }
     
-    .filters-grid {
-        grid-template-columns: 1fr;
-    }
-    
-    .section-header {
+    .modal-actions {
         flex-direction: column;
-        gap: 15px;
-        align-items: stretch;
     }
     
-    .controls {
+    .modal-actions button {
         width: 100%;
-        justify-content: center;
+    }
+}
+
+@media (max-width: 480px) {
+    .container {
+        padding: 10px;
     }
     
-    .form-actions {
-        flex-direction: column;
+    header h1 {
+        font-size: 1.8em;
+    }
+    
+    .section {
+        padding: 15px;
     }
 }

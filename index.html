@@ -3,287 +3,167 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Waterfall Task Planner v5</title>
+    <title>Waterfall Task Planner</title>
     <link rel="stylesheet" href="obr_planner.css">
 </head>
 <body>
     <div class="container">
         <header>
-            <h1>📊 Waterfall Task Planner v5</h1>
-            <p>Инструмент планирования с улучшенной формой</p>
+            <h1>📊 Waterfall Task Planner</h1>
+            <p>Инструмент планирования задач по Waterfall-методологии</p>
         </header>
 
-        <!-- Управление исполнителями -->
-        <section class="section">
-            <h2>👥 Управление исполнителями</h2>
-            <div class="form-group">
-                <label for="executor-name">Имя исполнителя:</label>
-                <input type="text" id="executor-name" placeholder="Введите имя исполнителя">
-                <label for="executor-efficiency">Производительность:</label>
-                <input type="number" id="executor-efficiency" min="0.1" max="2" step="0.1" value="1.0" placeholder="1.0">
-                <button onclick="addExecutor()">Добавить</button>
-            </div>
-            <div id="executors-list"></div>
-        </section>
-
-        <!-- Форма задачи (для добавления/редактирования) -->
-        <section class="section edit-form-section" id="edit-form-section" style="display: none;">
-            <h2 id="edit-form-title">✏️ Редактировать задачу</h2>
-            <div class="form-grid">
-                <input type="hidden" id="task-id">
-                
-                <div class="form-field">
-                    <label for="task-title-edit">Название задачи:</label>
-                    <input type="text" id="task-title-edit" placeholder="Введите название задачи" required>
-                </div>
-                
-                <div class="form-row">
-                    <div class="form-field">
-                        <label for="task-duration-edit">Длительность (раб. дней):</label>
-                        <input type="number" id="task-duration-edit" min="1" value="1" placeholder="1">
-                    </div>
-                    <div class="form-field">
-                        <label for="task-start-date-edit">Дата начала:</label>
-                        <input type="date" id="task-start-date-edit">
-                    </div>
-                    <div class="form-field">
-                        <label for="task-end-date-edit">Дата окончания (рассчитанная):</label>
-                        <input type="date" id="task-end-date-edit" readonly>
-                    </div>
-                </div>
-                
-                <div class="form-row">
-                    <div class="form-field">
-                        <label for="task-start-after-edit">Начать не раньше:</label>
-                        <input type="date" id="task-start-after-edit" placeholder="Выберите дату">
-                    </div>
-                    <div class="form-field">
-                        <label for="task-finish-before-edit">Закончить не позже:</label>
-                        <input type="date" id="task-finish-before-edit" placeholder="Выберите дату">
-                    </div>
-                </div>
-                
-                <div class="form-row">
-                    <div class="form-field">
-                        <label for="task-executor-edit">Исполнители:</label>
-                        <select id="task-executor-edit" multiple size="3">
-                            <!-- Будет заполнено скриптом -->
-                        </select>
-                    </div>
-                    <div class="form-field">
-                        <label for="task-epic-edit">Эпик:</label>
-                        <select id="task-epic-edit">
-                            <option value="">-- Выберите эпик --</option>
-                            <option value="Разработка">Разработка</option>
-                            <option value="Тестирование">Тестирование</option>
-                            <option value="Документация">Документация</option>
-                        </select>
-                    </div>
-                    <div class="form-field">
-                        <label for="task-priority-edit">Бизнес-ценность (1-9):</label>
-                        <input type="number" id="task-priority-edit" min="1" max="9" value="5" placeholder="5">
-                    </div>
-                </div>
-                
-                <div class="form-row">
-                    <div class="form-field">
-                        <label for="task-dependency-edit">Предшествующие задачи:</label>
-                        <select id="task-dependency-edit" multiple size="3">
-                            <!-- Будет заполнено скриптом -->
-                        </select>
-                    </div>
-                    <div class="form-field">
-                        <label for="task-comments-edit">Комментарии:</label>
-                        <textarea id="task-comments-edit" placeholder="Введите комментарии к задаче"></textarea>
-                    </div>
-                </div>
-            </div>
-            
-            <div class="form-actions">
-                <button onclick="saveTask()" class="btn-primary">✅ Сохранить изменения</button>
-                <button onclick="cancelEdit()" class="btn-secondary">❌ Отмена</button>
-            </div>
-        </section>
-
-        <!-- Добавление задачи -->
-        <section class="section" id="add-form-section">
-            <h2>➕ Добавить задачу</h2>
-            <div class="form-grid">
-                <div class="form-field">
-                    <label for="task-title">Название задачи:</label>
-                    <input type="text" id="task-title" placeholder="Введите название задачи" required>
-                </div>
-                
-                <div class="form-row">
-                    <div class="form-field">
-                        <label for="task-duration">Длительность (раб. дней):</label>
-                        <input type="number" id="task-duration" min="1" value="1" placeholder="1">
-                    </div>
-                    <div class="form-field">
-                        <label for="task-start-date">Дата начала:</label>
-                        <input type="date" id="task-start-date">
-                    </div>
-                    <div class="form-field">
-                        <label for="task-end-date">Дата окончания (рассчитанная):</label>
-                        <input type="date" id="task-end-date" readonly>
-                    </div>
-                </div>
-                
-                <div class="form-row">
-                    <div class="form-field">
-                        <label for="task-start-after">Начать не раньше:</label>
-                        <input type="date" id="task-start-after" placeholder="Выберите дату">
-                    </div>
-                    <div class="form-field">
-                        <label for="task-finish-before">Закончить не позже:</label>
-                        <input type="date" id="task-finish-before" placeholder="Выберите дату">
-                    </div>
-                </div>
-                
-                <div class="form-row">
-                    <div class="form-field">
-                        <label for="task-executor">Исполнители:</label>
-                        <select id="task-executor" multiple size="3">
-                            <!-- Будет заполнено скриптом -->
-                        </select>
-                    </div>
-                    <div class="form-field">
-                        <label for="task-epic">Эпик:</label>
-                        <select id="task-epic">
-                            <option value="">-- Выберите эпик --</option>
-                            <option value="Разработка">Разработка</option>
-                            <option value="Тестирование">Тестирование</option>
-                            <option value="Документация">Документация</option>
-                        </select>
-                    </div>
-                    <div class="form-field">
-                        <label for="task-priority">Бизнес-ценность (1-9):</label>
-                        <input type="number" id="task-priority" min="1" max="9" value="5" placeholder="5">
-                    </div>
-                </div>
-                
-                <div class="form-row">
-                    <div class="form-field">
-                        <label for="task-dependency">Предшествующие задачи:</label>
-                        <select id="task-dependency" multiple size="3">
-                            <!-- Будет заполнено скриптом -->
-                        </select>
-                    </div>
-                    <div class="form-field">
-                        <label for="task-comments">Комментарии:</label>
-                        <textarea id="task-comments" placeholder="Введите комментарии к задаче"></textarea>
-                    </div>
-                </div>
-            </div>
-            
-            <button onclick="addTask()" class="btn-primary">➕ Добавить задачу</button>
-        </section>
-
-        <!-- Фильтры -->
-        <section class="section filters-section">
-            <h2>🔍 Фильтры и сортировка</h2>
-            <div class="filters-grid">
-                <div class="filter-group">
-                    <label for="filter-executor">Исполнитель:</label>
-                    <select id="filter-executor" onchange="applyFilters()">
-                        <option value="">Все исполнители</option>
-                    </select>
-                </div>
-                
-                <div class="filter-group">
-                    <label for="filter-epic">Эпик:</label>
-                    <select id="filter-epic" onchange="applyFilters()">
-                        <option value="">Все эпики</option>
-                        <option value="Разработка">Разработка</option>
-                        <option value="Тестирование">Тестирование</option>
-                        <option value="Документация">Документация</option>
-                    </select>
-                </div>
-                
-                <div class="filter-group">
-                    <label for="filter-priority">Приоритет:</label>
-                    <select id="filter-priority" onchange="applyFilters()">
-                        <option value="">Все приоритеты</option>
-                        <option value="high">Высокий (7-9)</option>
-                        <option value="medium">Средний (4-6)</option>
-                        <option value="low">Низкий (1-3)</option>
-                    </select>
-                </div>
-                
-                <div class="filter-group">
-                    <label for="search-title">Поиск по названию:</label>
-                    <input type="text" id="search-title" placeholder="Введите часть названия..." onkeyup="applyFilters()">
-                </div>
-                
-                <div class="filter-actions">
-                    <button onclick="clearFilters()" class="btn-secondary">❌ Сбросить фильтры</button>
-                </div>
-            </div>
-        </section>
+        <div class="toolbar">
+            <button onclick="openAddTaskModal()" class="btn-primary">➕ Добавить задачу</button>
+            <button onclick="openManageExecutorsModal()" class="btn-secondary">👥 Управление исполнителями</button>
+            <button onclick="calculateSchedule()" class="btn-secondary">📅 Рассчитать график</button>
+            <button onclick="saveToXML()" class="btn-secondary">💾 Сохранить XML</button>
+            <input type="file" id="load-xml" accept=".xml" onchange="loadFromXML(event)" style="display:none;">
+            <label for="load-xml" class="btn-secondary">📂 Загрузить XML</label>
+        </div>
 
         <!-- Таблица задач -->
         <section class="section">
-            <div class="section-header">
-                <h2>📋 Список задач</h2>
-                <div class="controls">
-                    <button onclick="calculateSchedule()">🔄 Рассчитать график</button>
-                    <button onclick="saveToXML()">💾 Сохранить XML</button>
-                    <input type="file" id="load-xml" accept=".xml" onchange="loadFromXML(event)" style="display:none;">
-                    <label for="load-xml" class="btn-secondary">📂 Загрузить XML</label>
-                </div>
-            </div>
-            
+            <h2>📋 Список задач</h2>
             <div class="table-container">
                 <table id="tasks-table">
                     <thead>
                         <tr>
-                            <th onclick="sortTable('title')" class="sortable">
-                                Название
-                                <span class="sort-indicator" id="title-sort">↕️</span>
-                            </th>
-                            <th onclick="sortTable('duration')" class="sortable">
-                                Длительность
-                                <span class="sort-indicator" id="duration-sort">↕️</span>
-                            </th>
-                            <th onclick="sortTable('startDate')" class="sortable">
-                                Начало
-                                <span class="sort-indicator" id="startDate-sort">↕️</span>
-                            </th>
-                            <th onclick="sortTable('endDate')" class="sortable">
-                                Окончание
-                                <span class="sort-indicator" id="endDate-sort">↕️</span>
-                            </th>
-                            <th onclick="sortTable('executors')" class="sortable">
-                                Исполнители
-                                <span class="sort-indicator" id="executors-sort">↕️</span>
-                            </th>
-                            <th onclick="sortTable('epic')" class="sortable">
-                                Эпик
-                                <span class="sort-indicator" id="epic-sort">↕️</span>
-                            </th>
-                            <th onclick="sortTable('priority')" class="sortable">
-                                Ценность
-                                <span class="sort-indicator" id="priority-sort">↕️</span>
-                            </th>
+                            <th>Название</th>
+                            <th>Длительность</th>
+                            <th>Начало</th>
+                            <th>Окончание</th>
+                            <th>Исполнители</th>
+                            <th>Эпик</th>
+                            <th>Ценность</th>
                             <th>Действия</th>
                         </tr>
                     </thead>
                     <tbody id="tasks-tbody"></tbody>
                 </table>
             </div>
-            
-            <div class="table-footer">
-                <span id="results-count">Показано 0 из 0 задач</span>
-            </div>
         </section>
+    </div>
 
-        <!-- График занятости -->
-        <section class="section">
-            <h2>📅 График занятости исполнителей</h2>
-            <div id="schedule-chart" class="schedule-chart">
-                <!-- Будет заполняться скриптом -->
+    <!-- Модальное окно добавления/редактирования задачи -->
+    <div id="task-modal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeTaskModal()">&times;</span>
+            <h2 id="task-modal-title">Добавить задачу</h2>
+            <form id="task-form" onsubmit="handleTaskSubmit(event)">
+                <input type="hidden" id="task-id">
+                
+                <div class="form-group">
+                    <label for="task-title">Название задачи *</label>
+                    <input type="text" id="task-title" required>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="task-duration">Длительность (раб. дней)</label>
+                        <input type="number" id="task-duration" min="1" value="1">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="task-start-date">Дата начала</label>
+                        <input type="date" id="task-start-date">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="task-end-date">Дата окончания</label>
+                        <input type="date" id="task-end-date" readonly>
+                    </div>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="task-start-after">Начать не раньше</label>
+                        <input type="date" id="task-start-after">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="task-finish-before">Закончить не позже</label>
+                        <input type="date" id="task-finish-before">
+                    </div>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="task-executor">Исполнители</label>
+                        <select id="task-executor" multiple size="4"></select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="task-epic">Эпик</label>
+                        <select id="task-epic">
+                            <option value="">-- Выберите эпик --</option>
+                            <option value="Разработка">Разработка</option>
+                            <option value="Тестирование">Тестирование</option>
+                            <option value="Документация">Документация</option>
+                            <option value="Аналитика">Аналитика</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="task-priority">Бизнес-ценность (1-9)</label>
+                        <input type="number" id="task-priority" min="1" max="9" value="5">
+                    </div>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="task-dependency">Зависимости</label>
+                        <select id="task-dependency" multiple size="4"></select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="task-comments">Комментарии</label>
+                        <textarea id="task-comments" rows="3"></textarea>
+                    </div>
+                </div>
+                
+                <div class="modal-actions">
+                    <button type="button" onclick="closeTaskModal()" class="btn-secondary">Отмена</button>
+                    <button type="submit" class="btn-primary">Сохранить</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Модальное окно управления исполнителями -->
+    <div id="executor-modal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeExecutorModal()">&times;</span>
+            <h2>👥 Управление исполнителями</h2>
+            
+            <div class="form-group">
+                <label for="new-executor-name">Имя исполнителя</label>
+                <input type="text" id="new-executor-name" placeholder="Введите имя">
             </div>
-        </section>
+            
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="new-executor-efficiency">Производительность</label>
+                    <input type="number" id="new-executor-efficiency" min="0.1" max="2" step="0.1" value="1.0">
+                </div>
+                
+                <div class="form-group">
+                    <label for="new-executor-availability">Доступность</label>
+                    <select id="new-executor-availability">
+                        <option value="true">Доступен</option>
+                        <option value="false">Недоступен</option>
+                    </select>
+                </div>
+            </div>
+            
+            <button onclick="addExecutorFromModal()" class="btn-primary">Добавить исполнителя</button>
+            
+            <div class="executors-list" id="executors-list-modal"></div>
+            
+            <div class="modal-actions">
+                <button onclick="closeExecutorModal()" class="btn-secondary">Закрыть</button>
+            </div>
+        </div>
     </div>
 
     <script src="obr_planner.js"></script>
