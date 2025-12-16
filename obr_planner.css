@@ -47,10 +47,15 @@ header h1 {
     box-shadow: 0 2px 10px rgba(0,0,0,0.1);
 }
 
-.section h2 {
+.section h2, .section h3 {
     color: #2c3e50;
     margin-bottom: 20px;
     font-size: 1.5em;
+}
+
+.section h3 {
+    font-size: 1.2em;
+    margin-bottom: 15px;
 }
 
 /* Кнопки */
@@ -58,7 +63,7 @@ header h1 {
     background: #28a745;
     color: white;
     border: none;
-    padding: 12px 24px;
+    padding: 10px 16px;
     border-radius: 5px;
     cursor: pointer;
     font-size: 14px;
@@ -75,7 +80,7 @@ header h1 {
     background: #6c757d;
     color: white;
     border: none;
-    padding: 12px 24px;
+    padding: 10px 16px;
     border-radius: 5px;
     cursor: pointer;
     font-size: 14px;
@@ -84,6 +89,42 @@ header h1 {
 
 .btn-secondary:hover {
     background: #5a6268;
+}
+
+.btn-secondary.small {
+    padding: 6px 10px;
+    font-size: 12px;
+    margin-left: 5px;
+}
+
+/* Фильтры */
+.filters-section {
+    padding: 15px 25px;
+}
+
+.filters-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+    margin-bottom: 10px;
+}
+
+.filter-group {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex: 1;
+    min-width: 200px;
+}
+
+.filter-group label {
+    font-weight: 600;
+    font-size: 13px;
+    white-space: nowrap;
+}
+
+.filter-group select, .filter-group button {
+    font-size: 13px;
 }
 
 /* Таблица */
@@ -98,9 +139,10 @@ table {
 }
 
 th, td {
-    padding: 12px;
+    padding: 8px 12px;
     text-align: left;
     border-bottom: 1px solid #ddd;
+    font-size: 14px;
 }
 
 th {
@@ -118,10 +160,10 @@ tr:hover {
     background: #dc3545;
     color: white;
     border: none;
-    padding: 5px 10px;
+    padding: 4px 8px;
     border-radius: 3px;
     cursor: pointer;
-    font-size: 12px;
+    font-size: 11px;
 }
 
 .delete-btn:hover {
@@ -132,14 +174,36 @@ tr:hover {
     background: #007bff;
     color: white;
     border: none;
-    padding: 5px 10px;
+    padding: 4px 8px;
     border-radius: 3px;
     cursor: pointer;
-    font-size: 12px;
+    font-size: 11px;
 }
 
 .edit-btn:hover {
     background: #0056b3;
+}
+
+/* Сортировка */
+.sortable {
+    cursor: pointer;
+    user-select: none;
+    position: relative;
+}
+
+.sortable:hover {
+    background-color: #e9ecef;
+}
+
+.sort-indicator {
+    margin-left: 5px;
+    font-size: 12px;
+    opacity: 0.5;
+}
+
+.sort-indicator.active {
+    opacity: 1;
+    color: #007bff;
 }
 
 /* Модальные окна */
@@ -161,7 +225,7 @@ tr:hover {
     border: none;
     border-radius: 10px;
     width: 90%;
-    max-width: 900px;
+    max-width: 800px;
     max-height: 80vh;
     overflow-y: auto;
     position: relative;
@@ -190,9 +254,15 @@ tr:hover {
     border-top: 1px solid #eee;
 }
 
+.modal-buttons {
+    display: flex;
+    gap: 5px;
+    margin: 10px 0;
+}
+
 /* Формы */
 .form-group {
-    margin-bottom: 15px;
+    margin-bottom: 12px;
 }
 
 .form-group label {
@@ -200,16 +270,17 @@ tr:hover {
     margin-bottom: 5px;
     font-weight: 600;
     color: #495057;
+    font-size: 13px;
 }
 
 .form-group input,
 .form-group select,
 .form-group textarea {
     width: 100%;
-    padding: 10px;
+    padding: 8px 10px;
     border: 1px solid #ddd;
-    border-radius: 5px;
-    font-size: 14px;
+    border-radius: 4px;
+    font-size: 13px;
     transition: border-color 0.3s;
 }
 
@@ -223,90 +294,135 @@ tr:hover {
 
 .form-row {
     display: flex;
-    gap: 15px;
+    gap: 12px;
     flex-wrap: wrap;
-    margin-bottom: 15px;
+    margin-bottom: 12px;
 }
 
 .form-row > .form-group {
     flex: 1;
-    min-width: 200px;
+    min-width: 150px;
 }
 
 .form-row select[multiple] {
-    height: 100px;
+    height: 120px;
 }
 
 .form-row textarea {
     resize: vertical;
-    min-height: 80px;
+    min-height: 60px;
 }
 
 /* Специальные стили для задач */
 .task-high-priority {
     background-color: #ffebee !important;
-    border-left: 4px solid #f44336;
+    border-left: 3px solid #f44336;
 }
 
 .task-medium-priority {
     background-color: #fff3cd !important;
-    border-left: 4px solid #ffc107;
+    border-left: 3px solid #ffc107;
 }
 
 .task-low-priority {
     background-color: #d1ecf1 !important;
-    border-left: 4px solid #17a2b8;
+    border-left: 3px solid #17a2b8;
 }
 
-/* Список исполнителей в модалке */
-.executor-item {
+/* Списки элементов в модалках */
+.executor-item, .epic-item, .feature-item {
     display: flex;
     justify-content: space-between;
     align-items: center;
     background: #f8f9fa;
-    padding: 10px;
-    margin: 5px 0;
-    border-radius: 5px;
+    padding: 8px 12px;
+    margin: 4px 0;
+    border-radius: 4px;
     border: 1px solid #dee2e6;
+    font-size: 13px;
 }
 
-.executor-info {
-    display: flex;
-    flex-direction: column;
+.executor-info, .epic-info, .feature-info {
+    flex: 1;
 }
 
-.executor-name {
+.executor-name, .epic-name, .feature-name {
     font-weight: 600;
     color: #495057;
 }
 
-.executor-details {
-    font-size: 12px;
+.executor-details, .epic-details, .feature-details {
+    font-size: 11px;
     color: #6c757d;
 }
 
-.executor-actions button {
-    margin-left: 5px;
-    padding: 4px 8px;
+.executor-actions, .epic-actions, .feature-actions {
+    display: flex;
+    gap: 4px;
+}
+
+.executor-actions button, .epic-actions button, .feature-actions button {
+    margin-left: 4px;
+    padding: 3px 6px;
     border: none;
     border-radius: 3px;
     cursor: pointer;
-    font-size: 12px;
+    font-size: 11px;
 }
 
-.executor-edit {
+.executor-edit, .epic-edit, .feature-edit {
     background: #17a2b8;
     color: white;
 }
 
-.executor-delete {
+.executor-delete, .epic-delete, .feature-delete {
     background: #dc3545;
     color: white;
 }
 
-.executor-toggle {
+.executor-toggle, .epic-toggle, .feature-toggle {
     background: #28a745;
     color: white;
+}
+
+/* Список выбранных элементов */
+.selected-items {
+    background: #f8f9fa;
+    border: 1px solid #dee2e6;
+    border-radius: 4px;
+    padding: 8px;
+    min-height: 40px;
+}
+
+.selected-items-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px;
+    margin-bottom: 5px;
+}
+
+.selected-item {
+    background: #e9ecef;
+    padding: 4px 8px;
+    border-radius: 12px;
+    font-size: 12px;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.selected-item button {
+    background: #dc3545;
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 16px;
+    height: 16px;
+    font-size: 10px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 /* Адаптивность */
@@ -315,8 +431,19 @@ tr:hover {
         flex-direction: column;
     }
     
-    .toolbar {
+    .toolbar, .filters-container {
         flex-direction: column;
+    }
+    
+    .filter-group {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    
+    .filter-group button {
+        align-self: flex-start;
+        margin-left: 0 !important;
+        margin-top: 5px;
     }
     
     .modal-content {
@@ -329,6 +456,23 @@ tr:hover {
     }
     
     .modal-actions button {
+        width: 100%;
+    }
+    
+    /* Таблица на мобильных */
+    table {
+        font-size: 12px;
+    }
+    
+    th, td {
+        padding: 6px 8px;
+    }
+    
+    .modal-buttons {
+        flex-direction: column;
+    }
+    
+    .modal-buttons button {
         width: 100%;
     }
 }
@@ -344,5 +488,10 @@ tr:hover {
     
     .section {
         padding: 15px;
+    }
+    
+    .btn-primary, .btn-secondary {
+        padding: 8px 12px;
+        font-size: 13px;
     }
 }

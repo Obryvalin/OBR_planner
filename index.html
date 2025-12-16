@@ -15,12 +15,55 @@
 
         <div class="toolbar">
             <button onclick="openAddTaskModal()" class="btn-primary">➕ Добавить задачу</button>
-            <button onclick="openManageExecutorsModal()" class="btn-secondary">👥 Управление исполнителями</button>
-            <button onclick="calculateSchedule()" class="btn-secondary">📅 Рассчитать график</button>
-            <button onclick="saveToXML()" class="btn-secondary">💾 Сохранить XML</button>
-            <input type="file" id="load-xml" accept=".xml" onchange="loadFromXML(event)" style="display:none;">
-            <label for="load-xml" class="btn-secondary">📂 Загрузить XML</label>
+            <button onclick="openManageExecutorsModal()" class="btn-secondary">👥 Исполнители</button>
+            <button onclick="openManageEpicsModal()" class="btn-secondary">🎯 Эпики</button>
+            <button onclick="openManageFeaturesModal()" class="btn-secondary">💡 Фичи</button>
+            <button onclick="calculateSchedule()" class="btn-secondary">📅 Рассчитать</button>
+            <button onclick="saveToJSON()" class="btn-secondary">💾 Сохранить</button>
+            <input type="file" id="load-json" accept=".json" onchange="loadFromJSON(event)" style="display:none;">
+            <label for="load-json" class="btn-secondary">📂 Загрузить</label>
         </div>
+
+        <!-- Панель фильтрации -->
+        <section class="section filters-section">
+            <h3>🔍 Фильтры</h3>
+            <div class="filters-container">
+                <div class="filter-group">
+                    <label for="filter-executor">Исполнитель:</label>
+                    <select id="filter-executor" onchange="applyFilters()">
+                        <option value="">Все исполнители</option>
+                    </select>
+                    <button onclick="clearExecutorFilter()" class="btn-secondary small">Сбросить</button>
+                </div>
+                
+                <div class="filter-group">
+                    <label for="filter-feature">Фича:</label>
+                    <select id="filter-feature" onchange="applyFilters()">
+                        <option value="">Все фичи</option>
+                    </select>
+                    <button onclick="clearFeatureFilter()" class="btn-secondary small">Сбросить</button>
+                </div>
+                
+                <div class="filter-group">
+                    <label for="filter-epic">Эпик:</label>
+                    <select id="filter-epic" onchange="applyFilters()">
+                        <option value="">Все эпики</option>
+                    </select>
+                    <button onclick="clearEpicFilter()" class="btn-secondary small">Сбросить</button>
+                </div>
+                
+                <div class="filter-group">
+                    <label for="filter-priority">Приоритет:</label>
+                    <select id="filter-priority" onchange="applyFilters()">
+                        <option value="">Все приоритеты</option>
+                        <option value="high">Высокий (7-9)</option>
+                        <option value="medium">Средний (4-6)</option>
+                        <option value="low">Низкий (1-3)</option>
+                    </select>
+                    <button onclick="clearPriorityFilter()" class="btn-secondary small">Сбросить</button>
+                </div>
+            </div>
+        </section>
 
         <!-- Таблица задач -->
         <section class="section">
@@ -29,13 +72,34 @@
                 <table id="tasks-table">
                     <thead>
                         <tr>
-                            <th>Название</th>
-                            <th>Длительность</th>
-                            <th>Начало</th>
-                            <th>Окончание</th>
-                            <th>Исполнители</th>
-                            <th>Эпик</th>
-                            <th>Ценность</th>
+                            <th onclick="sortTable('title')" class="sortable">
+                                Задача
+                                <span class="sort-indicator" id="title-sort">↕️</span>
+                            </th>
+                            <th onclick="sortTable('duration')" class="sortable">
+                                Длит.
+                                <span class="sort-indicator" id="duration-sort">↕️</span>
+                            </th>
+                            <th onclick="sortTable('startDate')" class="sortable">
+                                Начало
+                                <span class="sort-indicator" id="startDate-sort">↕️</span>
+                            </th>
+                            <th onclick="sortTable('endDate')" class="sortable">
+                                Окончание
+                                <span class="sort-indicator" id="endDate-sort">↕️</span>
+                            </th>
+                            <th onclick="sortTable('executors')" class="sortable">
+                                Исполнители
+                                <span class="sort-indicator" id="executors-sort">↕️</span>
+                            </th>
+                            <th onclick="sortTable('feature')" class="sortable">
+                                Фича
+                                <span class="sort-indicator" id="feature-sort">↕️</span>
+                            </th>
+                            <th onclick="sortTable('priority')" class="sortable">
+                                Ценность
+                                <span class="sort-indicator" id="priority-sort">↕️</span>
+                            </th>
                             <th>Действия</th>
                         </tr>
                     </thead>
@@ -89,18 +153,9 @@
                 
                 <div class="form-row">
                     <div class="form-group">
-                        <label for="task-executor">Исполнители</label>
-                        <select id="task-executor" multiple size="4"></select>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label for="task-epic">Эпик</label>
-                        <select id="task-epic">
-                            <option value="">-- Выберите эпик --</option>
-                            <option value="Разработка">Разработка</option>
-                            <option value="Тестирование">Тестирование</option>
-                            <option value="Документация">Документация</option>
-                            <option value="Аналитика">Аналитика</option>
+                        <label for="task-feature">Фича</label>
+                        <select id="task-feature">
+                            <option value="">-- Выберите фичу --</option>
                         </select>
                     </div>
                     
@@ -112,14 +167,25 @@
                 
                 <div class="form-row">
                     <div class="form-group">
-                        <label for="task-dependency">Зависимости</label>
-                        <select id="task-dependency" multiple size="4"></select>
+                        <label>Исполнители</label>
+                        <div class="selected-items">
+                            <div id="selected-executors-list"></div>
+                            <button type="button" onclick="openExecutorsModal()" class="btn-secondary small">Изменить</button>
+                        </div>
                     </div>
                     
                     <div class="form-group">
-                        <label for="task-comments">Комментарии</label>
-                        <textarea id="task-comments" rows="3"></textarea>
+                        <label>Зависимости</label>
+                        <div class="selected-items">
+                            <div id="selected-dependencies-list"></div>
+                            <button type="button" onclick="openDependenciesModal()" class="btn-secondary small">Изменить</button>
+                        </div>
                     </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="task-comments">Комментарии</label>
+                    <textarea id="task-comments" rows="2"></textarea>
                 </div>
                 
                 <div class="modal-actions">
@@ -127,6 +193,60 @@
                     <button type="submit" class="btn-primary">Сохранить</button>
                 </div>
             </form>
+        </div>
+    </div>
+
+    <!-- Модальное окно управления исполнителями задачи -->
+    <div id="executors-modal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeExecutorsModal()">&times;</span>
+            <h2>👥 Управление исполнителями</h2>
+            
+            <div class="form-group">
+                <label>Доступные исполнители</label>
+                <select id="available-executors" multiple size="8"></select>
+                <div class="modal-buttons">
+                    <button onclick="addSelectedExecutors()" class="btn-primary">Добавить →</button>
+                    <button onclick="removeSelectedExecutors()" class="btn-secondary">← Удалить</button>
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <label>Выбранные исполнители</label>
+                <select id="selected-executors" multiple size="8"></select>
+            </div>
+            
+            <div class="modal-actions">
+                <button onclick="saveExecutors()" class="btn-primary">Сохранить</button>
+                <button onclick="closeExecutorsModal()" class="btn-secondary">Отмена</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Модальное окно управления зависимостями задачи -->
+    <div id="dependencies-modal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeDependenciesModal()">&times;</span>
+            <h2>🔗 Управление зависимостями</h2>
+            
+            <div class="form-group">
+                <label>Доступные задачи</label>
+                <select id="available-dependencies" multiple size="8"></select>
+                <div class="modal-buttons">
+                    <button onclick="addSelectedDependencies()" class="btn-primary">Добавить →</button>
+                    <button onclick="removeSelectedDependencies()" class="btn-secondary">← Удалить</button>
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <label>Выбранные зависимости</label>
+                <select id="selected-dependencies" multiple size="8"></select>
+            </div>
+            
+            <div class="modal-actions">
+                <button onclick="saveDependencies()" class="btn-primary">Сохранить</button>
+                <button onclick="closeDependenciesModal()" class="btn-secondary">Отмена</button>
+            </div>
         </div>
     </div>
 
@@ -162,6 +282,79 @@
             
             <div class="modal-actions">
                 <button onclick="closeExecutorModal()" class="btn-secondary">Закрыть</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Модальное окно управления эпиками -->
+    <div id="epic-modal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeEpicModal()">&times;</span>
+            <h2>🎯 Управление эпиками</h2>
+            
+            <div class="form-group">
+                <label for="new-epic-name">Название эпика</label>
+                <input type="text" id="new-epic-name" placeholder="Введите название эпика">
+            </div>
+            
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="new-epic-description">Описание</label>
+                    <textarea id="new-epic-description" rows="2" placeholder="Краткое описание эпика"></textarea>
+                </div>
+                
+                <div class="form-group">
+                    <label for="new-epic-priority">Приоритет (1-9)</label>
+                    <input type="number" id="new-epic-priority" min="1" max="9" value="5">
+                </div>
+            </div>
+            
+            <button onclick="addEpicFromModal()" class="btn-primary">Добавить эпик</button>
+            
+            <div class="epics-list" id="epics-list-modal"></div>
+            
+            <div class="modal-actions">
+                <button onclick="closeEpicModal()" class="btn-secondary">Закрыть</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Модальное окно управления фичами -->
+    <div id="feature-modal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeFeatureModal()">&times;</span>
+            <h2>💡 Управление фичами</h2>
+            
+            <div class="form-group">
+                <label for="new-feature-name">Название фичи</label>
+                <input type="text" id="new-feature-name" placeholder="Введите название фичи">
+            </div>
+            
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="new-feature-epic">Связанный эпик</label>
+                    <select id="new-feature-epic">
+                        <option value="">-- Выберите эпик --</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label for="new-feature-business-value">Бизнес-ценность</label>
+                    <input type="number" id="new-feature-business-value" min="1" max="9" value="5">
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <label for="new-feature-description">Описание</label>
+                <textarea id="new-feature-description" rows="2" placeholder="Описание фичи"></textarea>
+            </div>
+            
+            <button onclick="addFeatureFromModal()" class="btn-primary">Добавить фичу</button>
+            
+            <div class="features-list" id="features-list-modal"></div>
+            
+            <div class="modal-actions">
+                <button onclick="closeFeatureModal()" class="btn-secondary">Закрыть</button>
             </div>
         </div>
     </div>

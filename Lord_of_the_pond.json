@@ -1,0 +1,306 @@
+{
+  "executors": [
+    {
+      "id": 1734478290123,
+      "name": "Фродо Бэггинс",
+      "efficiency": 1,
+      "availability": true
+    },
+    {
+      "id": 1734478290124,
+      "name": "Сэмwise Гэмджи",
+      "efficiency": 1.1,
+      "availability": true
+    },
+    {
+      "id": 1734478290125,
+      "name": "Мерри Брендибак",
+      "efficiency": 0.9,
+      "availability": true
+    },
+    {
+      "id": 1734478290126,
+      "name": "Пиппин Тук",
+      "efficiency": 0.8,
+      "availability": true
+    },
+    {
+      "id": 1734478290127,
+      "name": "Арагорн",
+      "efficiency": 1.2,
+      "availability": true
+    }
+  ],
+  "epics": [
+    {
+      "id": 1734478290128,
+      "name": "Подготовка к путешествию",
+      "priority": 8,
+      "description": "Организационные мероприятия перед началом путешествия"
+    },
+    {
+      "id": 1734478290129,
+      "name": "Путешествие по рекам",
+      "priority": 9,
+      "description": "Основной этап путешествия на плоту по рекам Средиземья"
+    },
+    {
+      "id": 1734478290130,
+      "name": "Приключения в пути",
+      "priority": 7,
+      "description": "Встречи с опасностями и союзниками"
+    }
+  ],
+  "features": [
+    {
+      "id": 1734478290131,
+      "name": "Сбор снаряжения",
+      "epicId": 1734478290128,
+      "businessValue": 8,
+      "description": "Подготовка плота и припасов"
+    },
+    {
+      "id": 1734478290132,
+      "name": "Навигация по реке",
+      "epicId": 1734478290129,
+      "businessValue": 9,
+      "description": "Управление плотом и ориентирование"
+    },
+    {
+      "id": 1734478290133,
+      "name": "Безопасность",
+      "epicId": 1734478290130,
+      "businessValue": 9,
+      "description": "Охрана и защита от врагов"
+    },
+    {
+      "id": 1734478290134,
+      "name": "Сбор информации",
+      "epicId": 1734478290130,
+      "businessValue": 7,
+      "description": "Получение разведданных о пути"
+    },
+    {
+      "id": 1734478290135,
+      "name": "Связь с союзниками",
+      "epicId": 1734478290130,
+      "businessValue": 6,
+      "description": "Взаимодействие с другими народами"
+    }
+  ],
+  "tasks": [
+    {
+      "id": 1,
+      "title": "Собрать припасы для путешествия",
+      "duration": 2,
+      "startDate": "2025-01-15",
+      "endDate": "",
+      "startAfter": "",
+      "finishBefore": "2025-01-20",
+      "executors": [
+        1734478290123,
+        1734478290124
+      ],
+      "featureId": 1734478290131,
+      "priority": 8,
+      "dependencies": [],
+      "comments": "Необходимо собрать еду, воду и одежду на 2 недели",
+      "calculatedStart": "2025-01-15",
+      "calculatedEnd": "2025-01-17"
+    },
+    {
+      "id": 2,
+      "title": "Изготовить плот",
+      "duration": 3,
+      "startDate": "",
+      "endDate": "",
+      "startAfter": "",
+      "finishBefore": "2025-01-22",
+      "executors": [
+        1734478290123,
+        1734478290124,
+        1734478290125
+      ],
+      "featureId": 1734478290131,
+      "priority": 8,
+      "dependencies": [
+        1
+      ],
+      "comments": "Плот должен быть прочным и вместительным",
+      "calculatedStart": "2025-01-28",
+      "calculatedEnd": "2025-01-31"
+    },
+    {
+      "id": 8,
+      "title": "Переправа через пороги",
+      "duration": 2,
+      "startDate": "",
+      "endDate": "",
+      "startAfter": "",
+      "finishBefore": "2025-02-07",
+      "executors": [
+        1734478290123,
+        1734478290124,
+        1734478290127
+      ],
+      "featureId": 1734478290132,
+      "priority": 9,
+      "dependencies": [
+        6,
+        7
+      ],
+      "comments": "Осторожно пройти опасные участки реки",
+      "calculatedStart": "2025-03-04",
+      "calculatedEnd": "2025-03-06"
+    },
+    {
+      "id": 6,
+      "title": "Обеспечение безопасности плота",
+      "duration": 3,
+      "startDate": "",
+      "endDate": "",
+      "startAfter": "",
+      "finishBefore": "2025-02-03",
+      "executors": [
+        1734478290127,
+        1734478290123
+      ],
+      "featureId": 1734478290133,
+      "priority": 9,
+      "dependencies": [
+        5
+      ],
+      "comments": "Охранять плот от орков и других врагов",
+      "calculatedStart": "2025-03-07",
+      "calculatedEnd": "2025-03-12"
+    },
+    {
+      "id": 10,
+      "title": "Прибытие в точку назначения",
+      "duration": 1,
+      "startDate": "",
+      "endDate": "",
+      "startAfter": "",
+      "finishBefore": "2025-02-10",
+      "executors": [
+        1734478290123,
+        1734478290124,
+        1734478290125,
+        1734478290126,
+        1734478290127
+      ],
+      "featureId": 1734478290132,
+      "priority": 10,
+      "dependencies": [
+        8,
+        9
+      ],
+      "comments": "Завершить путешествие на плоту и подготовиться к следующему этапу",
+      "calculatedStart": "2025-03-14",
+      "calculatedEnd": "2025-03-17"
+    },
+    {
+      "id": 9,
+      "title": "Дозаправка припасов",
+      "duration": 1,
+      "startDate": "",
+      "endDate": "",
+      "startAfter": "",
+      "finishBefore": "2025-02-08",
+      "executors": [
+        1734478290124
+      ],
+      "featureId": 1734478290131,
+      "priority": 7,
+      "dependencies": [
+        8
+      ],
+      "comments": "Пополнить запасы еды и воды у берега",
+      "calculatedStart": "2025-03-18",
+      "calculatedEnd": "2025-03-19"
+    },
+    {
+      "id": 3,
+      "title": "Планирование маршрута по реке",
+      "duration": 1,
+      "startDate": "",
+      "endDate": "",
+      "startAfter": "",
+      "finishBefore": "2025-01-23",
+      "executors": [
+        1734478290127
+      ],
+      "featureId": 1734478290132,
+      "priority": 9,
+      "dependencies": [],
+      "comments": "Определить безопасный путь по реке Андуйн",
+      "calculatedStart": "2025-12-16",
+      "calculatedEnd": "2025-12-17"
+    },
+    {
+      "id": 5,
+      "title": "Разведка берегов",
+      "duration": 2,
+      "startDate": "",
+      "endDate": "",
+      "startAfter": "",
+      "finishBefore": "2025-01-28",
+      "executors": [
+        1734478290127
+      ],
+      "featureId": 1734478290134,
+      "priority": 7,
+      "dependencies": [
+        4
+      ],
+      "comments": "Проверить наличие врагов на берегах",
+      "calculatedStart": "2025-12-24",
+      "calculatedEnd": "2025-12-26"
+    },
+    {
+      "id": 7,
+      "title": "Встреча с энтом",
+      "duration": 1,
+      "startDate": "",
+      "endDate": "",
+      "startAfter": "",
+      "finishBefore": "2025-02-01",
+      "executors": [
+        1734478290123,
+        1734478290124
+      ],
+      "featureId": 1734478290135,
+      "priority": 6,
+      "dependencies": [
+        4
+      ],
+      "comments": "Попросить у энта совет о дальнейшем пути",
+      "calculatedStart": "2025-12-24",
+      "calculatedEnd": "2025-12-25"
+    },
+    {
+      "id": 4,
+      "title": "Спуск по реке Андуйн",
+      "duration": 5,
+      "startDate": "",
+      "endDate": "",
+      "startAfter": "",
+      "finishBefore": "2025-02-05",
+      "executors": [
+        1734478290123,
+        1734478290124,
+        1734478290125,
+        1734478290126
+      ],
+      "featureId": 1734478290132,
+      "priority": 9,
+      "dependencies": [
+        3
+      ],
+      "comments": "Двигаться вдоль западного берега, избегать опасных участков",
+      "calculatedStart": "2025-12-25",
+      "calculatedEnd": "2026-01-01"
+    }
+  ],
+  "taskIdCounter": 11
+}
