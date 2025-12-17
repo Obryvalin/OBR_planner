@@ -15,6 +15,7 @@
 
         <div class="toolbar">
             <button onclick="openAddTaskModal()" class="btn-primary">➕ Добавить задачу</button>
+            <button onclick="openProjectSettingsModal()" class="btn-secondary">⚙️ Настройки проекта</button>
             <button onclick="openManageExecutorsModal()" class="btn-secondary">👥 Исполнители</button>
             <button onclick="openManageEpicsModal()" class="btn-secondary">🎯 Эпики</button>
             <button onclick="openManageFeaturesModal()" class="btn-secondary">💡 Фичи</button>
@@ -107,6 +108,42 @@
                 </table>
             </div>
         </section>
+    </div>
+
+    <!-- Модальное окно настроек проекта -->
+    <div id="project-settings-modal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeProjectSettingsModal()">&times;</span>
+            <h2>⚙️ Настройки проекта</h2>
+            <form id="project-settings-form">
+                <div class="form-group">
+                    <label for="project-name">Название проекта</label>
+                    <input type="text" id="project-name" placeholder="Введите название проекта">
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="project-start-date">Дата начала проекта</label>
+                        <input type="date" id="project-start-date">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="project-end-date">Плановая дата окончания</label>
+                        <input type="date" id="project-end-date">
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="project-description">Описание проекта</label>
+                    <textarea id="project-description" rows="3" placeholder="Краткое описание проекта"></textarea>
+                </div>
+                
+                <div class="modal-actions">
+                    <button type="button" onclick="closeProjectSettingsModal()" class="btn-secondary">Отмена</button>
+                    <button type="submit" class="btn-primary">Сохранить</button>
+                </div>
+            </form>
+        </div>
     </div>
 
     <!-- Модальное окно добавления/редактирования задачи -->

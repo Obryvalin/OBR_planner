@@ -1,0 +1,98 @@
+{
+  "executors": [
+    {
+      "id": 1765918076194,
+      "name": "Илья",
+      "efficiency": 1.2,
+      "availability": true
+    },
+    {
+      "id": 1765918081819,
+      "name": "Вася",
+      "efficiency": 1,
+      "availability": true
+    },
+    {
+      "id": 1765918095455,
+      "name": "Петя",
+      "efficiency": 0.5,
+      "availability": true
+    }
+  ],
+  "epics": [
+    {
+      "id": 1765918131049,
+      "name": "Эпик 1",
+      "description": "",
+      "priority": 8
+    },
+    {
+      "id": 1765918138913,
+      "name": "Эпик 2",
+      "description": "",
+      "priority": 4
+    }
+  ],
+  "features": [
+    {
+      "id": 1765918153155,
+      "name": "Фича 1.1",
+      "epicId": 1765918131049,
+      "businessValue": 4,
+      "description": ""
+    },
+    {
+      "id": 1765918160626,
+      "name": "Фича 1.2",
+      "epicId": 1765918131049,
+      "businessValue": 8,
+      "description": ""
+    },
+    {
+      "id": 1765918170772,
+      "name": "Фича 2.1",
+      "epicId": 1765918138913,
+      "businessValue": 8,
+      "description": ""
+    }
+  ],
+  "tasks": [
+    {
+      "id": 1,
+      "title": "Первая",
+      "duration": 3,
+      "startDate": "2025-12-16",
+      "endDate": "",
+      "startAfter": "",
+      "finishBefore": "2025-12-19",
+      "executors": [
+        1765918076194
+      ],
+      "featureId": 1765918153155,
+      "priority": 5,
+      "dependencies": [],
+      "comments": "",
+      "calculatedStart": "2025-12-22",
+      "calculatedEnd": "2025-12-25"
+    },
+    {
+      "id": 2,
+      "title": "Вторая",
+      "duration": 12,
+      "startDate": "",
+      "endDate": "",
+      "startAfter": "2025-12-18",
+      "finishBefore": "",
+      "executors": [
+        1765918081819
+      ],
+      "featureId": 1765918153155,
+      "priority": 4,
+      "dependencies": [],
+      "comments": "",
+      "calculatedStart": "2025-12-19",
+      "calculatedEnd": "2026-01-06"
+    }
+  ],
+  "taskIdCounter": 3
+}

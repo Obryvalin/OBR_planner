@@ -8,6 +8,14 @@ let editingTaskId = null;
 let editingEpicId = null;
 let editingFeatureId = null;
 
+// Настройки проекта
+let projectSettings = {
+    name: 'Новый проект',
+    startDate: '',
+    endDate: '',
+    description: ''
+};
+
 // Состояние сортировки
 let currentSort = {
     column: null,
@@ -33,7 +41,50 @@ document.addEventListener('DOMContentLoaded', function() {
     updateTaskDependencySelect();
     updateFeatureEpicSelect();
     updateFilterSelects();
+    loadProjectSettings();
 });
+
+// === НАСТРОЙКИ ПРОЕКТА ===
+
+// Открытие модального окна настроек проекта
+function openProjectSettingsModal() {
+    document.getElementById('project-name').value = projectSettings.name;
+    document.getElementById('project-start-date').value = projectSettings.startDate;
+    document.getElementById('project-end-date').value = projectSettings.endDate;
+    document.getElementById('project-description').value = projectSettings.description;
+    
+    document.getElementById('project-settings-modal').style.display = 'block';
+}
+
+// Закрытие модального окна настроек проекта
+function closeProjectSettingsModal() {
+    document.getElementById('project-settings-modal').style.display = 'none';
+}
+
+// Обработка отправки формы настроек проекта
+document.getElementById('project-settings-form').onsubmit = function(event) {
+    event.preventDefault();
+    
+    projectSettings.name = document.getElementById('project-name').value || 'Новый проект';
+    projectSettings.startDate = document.getElementById('project-start-date').value;
+    projectSettings.endDate = document.getElementById('project-end-date').value;
+    projectSettings.description = document.getElementById('project-description').value;
+    
+    closeProjectSettingsModal();
+};
+
+// Загрузка настроек проекта из localStorage
+function loadProjectSettings() {
+    const savedSettings = localStorage.getItem('projectSettings');
+    if (savedSettings) {
+        projectSettings = JSON.parse(savedSettings);
+    }
+}
+
+// Сохранение настроек проекта в localStorage
+function saveProjectSettings() {
+    localStorage.setItem('projectSettings', JSON.stringify(projectSettings));
+}
 
 // === МОДАЛЬНЫЕ ОКНА ===
 
@@ -200,7 +251,7 @@ function closeFeatureModal() {
 // Закрытие модальных окон при клике вне содержимого
 window.onclick = function(event) {
     const modalIds = [
-        'task-modal', 'executors-modal', 'dependencies-modal', 
+        'project-settings-modal', 'task-modal', 'executors-modal', 'dependencies-modal', 
         'executor-modal', 'epic-modal', 'feature-modal'
     ];
     
@@ -880,7 +931,7 @@ function hasCircularDependency(taskId, newDependencies) {
     return hasCycle(tempId);
 }
 
-// Расчет графика с оптимизацией по доступности исполнителей
+// Расчет графика с оптимизацией
 function calculateSchedule() {
     if (tasks.length === 0) {
         alert('Нет задач для расчета');
@@ -921,6 +972,53 @@ function calculateSchedule() {
         }
     }
 
+    // Оптимизируем расписание
+    const executorSchedules = {}; // Расписание для каждого исполнителя
+    const taskStatus = {}; // Статус задачи (начало, конец)
+
+    // Инициализируем расписания
+    executors.forEach(executor => {
+        executorSchedules[executor.id] = [];
+    });
+
+    // Функция проверки доступности исполнителя в дату
+    function isExecutorAvailable(executorId, date, duration) {
+        const schedule = executorSchedules[executorId];
+        const taskStart = new Date(date);
+        const taskEnd = addWorkDays(new Date(date), duration - 1); // -1 потому что duration включает начальный день
+        
+        for (let scheduledTask of schedule) {
+            const scheduledStart = new Date(scheduledTask.start);
+            const scheduledEnd = new Date(scheduledTask.end);
+            
+            // Проверяем пересечение дат
+            if (!(taskEnd < scheduledStart || taskStart > scheduledEnd)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    // Функция поиска ближайшей доступной даты для исполнителя
+    function findEarliestAvailableDate(executorId, earliestDate, duration) {
+        let candidateDate = new Date(earliestDate);
+        
+        // Если проект имеет дату начала, используем ее как базовую
+        if (projectSettings.startDate) {
+            const projectStartDate = new Date(projectSettings.startDate);
+            if (candidateDate < projectStartDate) {
+                candidateDate = projectStartDate;
+            }
+        }
+        
+        // Ищем доступную дату
+        while (!isExecutorAvailable(executorId, candidateDate, duration)) {
+            candidateDate.setDate(candidateDate.getDate() + 1);
+        }
+        
+        return candidateDate;
+    }
+
     // Рассчитываем даты для каждой задачи в порядке выполнения
     for (let taskId of order) {
         const task = tasks.find(t => t.id === taskId);
@@ -929,108 +1027,115 @@ function calculateSchedule() {
         let startDate = null;
         let endDate = null;
 
-        // Определяем начальную дату
-        if (task.startDate) {
-            startDate = new Date(task.startDate);
-        } else {
-            // Минимальная дата - начало после всех зависимостей
-            let maxEndDate = null;
-            
-            if (task.dependencies && task.dependencies.length > 0) {
-                for (let depId of task.dependencies) {
-                    const depTask = tasks.find(t => t.id === depId);
-                    if (depTask && depTask.calculatedEnd) {
-                        const depEnd = new Date(depTask.calculatedEnd);
-                        if (!maxEndDate || depEnd > maxEndDate) {
-                            maxEndDate = depEnd;
-                        }
+        // Определяем минимальную дату начала
+        let minStartDate = new Date(); // Базовая дата
+        
+        // Если проект имеет дату начала, используем ее
+        if (projectSettings.startDate) {
+            minStartDate = new Date(projectSettings.startDate);
+        }
+        
+        // Минимальная дата - начало после всех зависимостей
+        let maxEndDate = null;
+        
+        if (task.dependencies && task.dependencies.length > 0) {
+            for (let depId of task.dependencies) {
+                const depTask = tasks.find(t => t.id === depId);
+                if (depTask && depTask.calculatedEnd) {
+                    const depEnd = new Date(depTask.calculatedEnd);
+                    if (!maxEndDate || depEnd > maxEndDate) {
+                        maxEndDate = depEnd;
                     }
                 }
             }
+        }
+        
+        // Если есть ограничение "начать не раньше"
+        if (task.startAfter) {
+            const startAfterDate = new Date(task.startAfter);
+            if (!maxEndDate || startAfterDate > maxEndDate) {
+                maxEndDate = startAfterDate;
+            }
+        }
+        
+        // Финальная минимальная дата начала
+        if (maxEndDate) {
+            minStartDate = maxEndDate;
+        }
+
+        // Рассчитываем даты с учетом доступности исполнителей
+        if (task.executors.length === 0) {
+            // Если нет исполнителей, используем минимальную дату
+            startDate = new Date(minStartDate);
+            endDate = addWorkDays(new Date(startDate), task.duration);
+        } else {
+            // Находим ближайшую дату, когда все исполнители будут доступны
+            startDate = new Date(minStartDate);
             
-            // Если есть ограничение "начать не раньше"
-            if (task.startAfter) {
-                const startAfterDate = new Date(task.startAfter);
-                if (!maxEndDate || startAfterDate > maxEndDate) {
-                    maxEndDate = startAfterDate;
+            // Для каждого исполнителя находим ближайшую доступную дату
+            let latestStartDate = new Date(minStartDate);
+            for (let executorId of task.executors) {
+                const availableDate = findEarliestAvailableDate(executorId, latestStartDate, task.duration);
+                if (availableDate > latestStartDate) {
+                    latestStartDate = availableDate;
                 }
             }
             
-            startDate = maxEndDate ? new Date(maxEndDate.getTime() + 24*60*60*1000) : new Date(); // +1 день
+            startDate = latestStartDate;
+            endDate = addWorkDays(new Date(startDate), task.duration);
         }
-
-        // Проверяем, доступны ли исполнители в выбранные дни
-        startDate = findAvailableDateForExecutors(task.executors, startDate, task.duration);
-
-        // Рассчитываем конечную дату
-        const workDays = task.duration;
-        endDate = addWorkDays(new Date(startDate), workDays);
 
         // Если есть ограничение "закончить не позже"
         if (task.finishBefore) {
             const finishBeforeDate = new Date(task.finishBefore);
             if (endDate > finishBeforeDate) {
-                console.warn(`Предупреждение: задача "${task.title}" выходит за дедлайн ${finishBeforeDate.toLocaleDateString()}`);
+                // Пытаемся перенести задачу раньше
+                let newStartDate = new Date(finishBeforeDate);
+                newStartDate = subtractWorkDays(newStartDate, task.duration - 1);
+                
+                // Проверяем, что новая дата не раньше минимальной
+                if (newStartDate >= minStartDate) {
+                    startDate = newStartDate;
+                    endDate = addWorkDays(new Date(startDate), task.duration - 1);
+                } else {
+                    console.warn(`Предупреждение: задача "${task.title}" выходит за дедлайн ${finishBeforeDate.toLocaleDateString()}`);
+                }
             }
         }
 
+        // Обновляем задачу
         task.calculatedStart = startDate.toISOString().split('T')[0];
         task.calculatedEnd = endDate.toISOString().split('T')[0];
+
+        // Обновляем расписание исполнителей
+        for (let executorId of task.executors) {
+            executorSchedules[executorId].push({
+                start: task.calculatedStart,
+                end: task.calculatedEnd,
+                taskId: task.id
+            });
+        }
     }
 
     renderTasksTable();
 }
 
-// Поиск доступной даты для исполнителей (учитываем, что один исполнитель не может делать 2 задачи в один день)
-function findAvailableDateForExecutors(executorIds, startDate, duration) {
-    let candidateDate = new Date(startDate);
-    let maxRetries = 30; // Максимальное количество дней для поиска
-    let retries = 0;
+// Вычитание рабочих дней из даты
+function subtractWorkDays(date, days) {
+    let result = new Date(date);
+    let subtractedDays = 0;
     
-    while (retries < maxRetries) {
-        // Проверяем, свободны ли все исполнители в этот день и на протяжении всей задачи
-        let isAvailable = true;
+    while (subtractedDays < days) {
+        result.setDate(result.getDate() - 1);
         
-        for (let dayOffset = 0; dayOffset < duration; dayOffset++) {
-            const checkDate = addWorkDays(new Date(candidateDate), dayOffset);
-            const checkDateStr = checkDate.toISOString().split('T')[0];
-            
-            for (const execId of executorIds) {
-                // Проверяем, не заняты ли исполнители в этот день
-                const assignedTasks = tasks.filter(t => 
-                    t.executors.includes(execId) && 
-                    t.calculatedStart && 
-                    t.calculatedEnd
-                );
-                
-                for (const assignedTask of assignedTasks) {
-                    const taskStart = new Date(assignedTask.calculatedStart);
-                    const taskEnd = new Date(assignedTask.calculatedEnd);
-                    
-                    // Проверяем пересечение дат
-                    if (checkDate >= taskStart && checkDate <= taskEnd) {
-                        isAvailable = false;
-                        break;
-                    }
-                }
-                
-                if (!isAvailable) break;
-            }
-            
-            if (!isAvailable) break;
+        // Проверяем, является ли день выходным (сб, вс)
+        const dayOfWeek = result.getDay();
+        if (dayOfWeek !== 0 && dayOfWeek !== 6) { // 0 = воскресенье, 6 = суббота
+            subtractedDays++;
         }
-        
-        if (isAvailable) {
-            return candidateDate;
-        }
-        
-        // Если не доступны, пробуем следующий день
-        candidateDate = addWorkDays(candidateDate, 1);
-        retries++;
     }
     
-    // Если не нашли подходящую дату, возвращаем исходную (пользователь увидит конфликт)
-    return startDate;
+    return result;
 }
 
 // Добавление рабочих дней к дате (без выходных)
@@ -1350,6 +1455,7 @@ function saveToJSON() {
     }
     
     const projectData = {
+        projectSettings: projectSettings,
         executors: executors,
         epics: epics,
         features: features,
@@ -1382,6 +1488,12 @@ function loadFromJSON(event) {
             const projectData = JSON.parse(e.target.result);
             
             // Загрузка данных
+            projectSettings = projectData.projectSettings || {
+                name: 'Новый проект',
+                startDate: '',
+                endDate: '',
+                description: ''
+            };
             executors = projectData.executors || [];
             epics = projectData.epics || [];
             features = projectData.features || [];
